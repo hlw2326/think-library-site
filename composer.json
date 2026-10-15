@@ -2,7 +2,7 @@
   "type": "think-admin-plugin",
   "name": "hlw2326/think-library-site",
   "license": "MIT",
-  "homepage": "https://thinkadmin.top",
+  "homepage": "https://hlwadmin.top",
   "description": "Multi-site support for HlwAdmin",
   "authors": [
     {
@@ -38,7 +38,7 @@
     "config": {
       "type": "module",
       "name": "多站点管理",
-      "document": "https://thinkadmin.top/plugin/think-library-site.html",
+      "document": "https://hlwadmin.top/plugin/think-library-site.html",
       "description": "提供站点、域名、站点用户与角色管理，以及分站请求隔离和站点插件支持。"
     }
   },
