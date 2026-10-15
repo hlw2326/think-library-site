@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
+use think\admin\database\migration\PhinxExtend;
 use think\migration\Migrator;
+use think\site\Service;
 use think\site\phinx\PhinxExtendV2;
 
 @set_time_limit(0);
@@ -11,7 +13,7 @@ use think\site\phinx\PhinxExtendV2;
 /**
  * 站点库数据表：站点、域名为全局表，用户/角色/授权/配置为站点隔离表.
  */
-class InstallSite20260101 extends Migrator
+class InstallSiteSchema extends Migrator
 {
     /**
      * 获取脚本名称.
@@ -26,18 +28,21 @@ class InstallSite20260101 extends Migrator
      */
     public function change()
     {
-        $this->createSite();
-        $this->createSiteDomain();
-        $this->createSiteUser();
-        $this->createSiteAuth();
-        $this->createSiteAuthNode();
-        $this->createSiteConfig();
+        $this->_create_site();
+        $this->_create_site_domain();
+        $this->_create_site_user();
+        $this->_create_site_auth();
+        $this->_create_site_auth_node();
+        $this->_create_site_config();
+        $this->insertMenu();
     }
 
     /**
-     * 站点(全局表).
+     * 创建数据对象.
+     * @class Site
+     * @table site
      */
-    private function createSite(): void
+    private function _create_site(): void
     {
         $table = $this->table('site', ['comment' => '站点']);
         PhinxExtendV2::global($table, [
@@ -62,9 +67,11 @@ class InstallSite20260101 extends Migrator
     }
 
     /**
-     * 站点域名(全局表，site_id 是外键而不是隔离列).
+     * 创建数据对象.
+     * @class SiteDomain
+     * @table site_domain
      */
-    private function createSiteDomain(): void
+    private function _create_site_domain(): void
     {
         $table = $this->table('site_domain', ['comment' => '站点域名']);
         PhinxExtendV2::global($table, [
@@ -80,9 +87,11 @@ class InstallSite20260101 extends Migrator
     }
 
     /**
-     * 站点用户(隔离表).
+     * 创建数据对象.
+     * @class SiteUser
+     * @table site_user
      */
-    private function createSiteUser(): void
+    private function _create_site_user(): void
     {
         $table = $this->table('site_user', ['comment' => '站点用户']);
         PhinxExtendV2::upgrade($table, [
@@ -107,9 +116,11 @@ class InstallSite20260101 extends Migrator
     }
 
     /**
-     * 站点角色(隔离表).
+     * 创建数据对象.
+     * @class SiteAuth
+     * @table site_auth
      */
-    private function createSiteAuth(): void
+    private function _create_site_auth(): void
     {
         $table = $this->table('site_auth', ['comment' => '站点角色']);
         PhinxExtendV2::upgrade($table, [
@@ -124,9 +135,11 @@ class InstallSite20260101 extends Migrator
     }
 
     /**
-     * 站点角色授权节点(隔离表).
+     * 创建数据对象.
+     * @class SiteAuthNode
+     * @table site_auth_node
      */
-    private function createSiteAuthNode(): void
+    private function _create_site_auth_node(): void
     {
         $table = $this->table('site_auth_node', ['comment' => '站点授权']);
         PhinxExtendV2::upgrade($table, [
@@ -138,9 +151,11 @@ class InstallSite20260101 extends Migrator
     }
 
     /**
-     * 站点配置(隔离表).
+     * 创建数据对象.
+     * @class SiteConfig
+     * @table site_config
      */
-    private function createSiteConfig(): void
+    private function _create_site_config(): void
     {
         $table = $this->table('site_config', ['comment' => '站点配置']);
         PhinxExtendV2::upgrade($table, [
@@ -150,5 +165,14 @@ class InstallSite20260101 extends Migrator
         ], [
             ['columns' => ['site_id', 'type', 'name'], 'unique' => true],
         ], true);
+    }
+
+    private function insertMenu(): void
+    {
+        $row = $this->fetchRow("SELECT 1 FROM `system_menu` WHERE `url` = 'site/manage.index/index' OR `node` = 'site/manage.index/index' LIMIT 1");
+        if ($row) {
+            return;
+        }
+        PhinxExtend::write2menu(Service::menu(), [], $this->table('system_menu'));
     }
 }

@@ -27,7 +27,7 @@ class Service extends Plugin
 
     protected $appName = '多站点';
 
-    protected $package = 'hlw2326/think-site-library';
+    protected $package = 'hlw2326/think-library-site';
 
     /**
      * 总控后台菜单：站点与域名管理.
