@@ -64,7 +64,7 @@ class SiteCheck extends Command
                     continue;
                 }
                 if (!in_array('site_id', $fields, true)) {
-                    $output->error("模型 {$class} 继承了 think\\site\\Model，但表缺少 site_id 列，请用 PhinxExtendV2 建表");
+                    $output->error("模型 {$class} 继承了 think\\site\\base\\Model，但表缺少 site_id 列，请用 PhinxExtendV2 建表");
                     ++$errors;
                 }
             }

@@ -14,6 +14,7 @@ use think\site\Service;
 use think\site\service\SiteAccess;
 use think\site\service\SiteContext;
 use think\site\service\SiteRegistry;
+use think\site\service\SiteResolver;
 
 /**
  * 站点守卫：挂在 route 中间件最前面(早于总控 RbacAccess).
