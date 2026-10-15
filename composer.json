@@ -12,8 +12,7 @@
   ],
   "require": {
     "php": "^8.2",
-    "hlw2326/think-library": "^6.1|@dev",
-    "hlw2326/think-plugs-admin": "^1.0|@dev",
+    "hlw2326/think-plugs-admin": "*",
     "topthink/think-migration": "^3.0|*"
   },
   "autoload": {
