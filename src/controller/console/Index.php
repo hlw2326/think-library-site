@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace think\site\controller\console;
 
-use think\site\Controller;
+use think\site\base\Controller;
 use think\site\model\Site;
-use think\site\SiteAccess;
-use think\site\SiteMenu;
+use think\site\service\SiteAccess;
+use think\site\service\SiteMenu;
 
 /**
  * 站点控制台首页.

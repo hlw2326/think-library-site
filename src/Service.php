@@ -7,6 +7,7 @@ namespace think\site;
 use think\admin\facade\Plugin;
 use think\App;
 use think\site\command\SiteCheck;
+use think\site\middleware\SiteGuard;
 
 /**
  * 站点库服务：注册守卫、命令，并提供总控侧的站点管理菜单.
@@ -40,6 +41,14 @@ class Service extends Plugin
                 'subs' => [
                     ['name' => '站点列表', 'icon' => 'layui-icon layui-icon-template-1', 'node' => 'site/manage.index/index'],
                     ['name' => '站点域名', 'icon' => 'layui-icon layui-icon-website', 'node' => 'site/manage.domain/index'],
+                ],
+            ],
+            [
+                'name' => '站点控制台',
+                'subs' => [
+                    ['name' => '控制台首页', 'icon' => 'layui-icon layui-icon-home', 'node' => 'site/console.index/index'],
+                    ['name' => '站点用户', 'icon' => 'layui-icon layui-icon-username', 'node' => 'site/console.user/index'],
+                    ['name' => '站点角色', 'icon' => 'layui-icon layui-icon-vercode', 'node' => 'site/console.auth/index'],
                 ],
             ],
         ];

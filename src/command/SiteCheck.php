@@ -7,9 +7,9 @@ namespace think\site\command;
 use think\console\Command;
 use think\console\Input;
 use think\console\Output;
-use think\site\Model;
-use think\site\SitePlugin;
-use think\site\SiteRegistry;
+use think\site\base\Model;
+use think\site\base\SitePlugin;
+use think\site\service\SiteRegistry;
 
 /**
  * 站点一致性自检：分站插件的声明、依赖与表结构是否对得上.

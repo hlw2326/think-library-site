@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use think\site\model\SiteConfig;
-use think\site\SiteContext;
+use think\site\service\SiteContext;
 
 if (!function_exists('siteid')) {
     /**

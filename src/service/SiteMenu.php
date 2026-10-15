@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace think\site;
+namespace think\site\service;
 
 use think\admin\extend\DataExtend;
 use think\admin\service\NodeService;

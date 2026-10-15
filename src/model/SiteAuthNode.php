@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace think\site\model;
 
-use think\site\Model;
+use think\site\base\Model;
 
 /**
  * 站点角色授权节点(站点隔离).

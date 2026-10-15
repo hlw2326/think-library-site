@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace think\site;
+namespace think\site\middleware;
 
 use think\admin\service\AdminService;
 use think\admin\service\NodeService;
@@ -10,6 +10,10 @@ use think\App;
 use think\exception\HttpResponseException;
 use think\Request;
 use think\Response;
+use think\site\Service;
+use think\site\service\SiteAccess;
+use think\site\service\SiteContext;
+use think\site\service\SiteRegistry;
 
 /**
  * 站点守卫：挂在 route 中间件最前面(早于总控 RbacAccess).

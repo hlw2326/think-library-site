@@ -6,10 +6,10 @@ namespace think\site\controller\console;
 
 use think\admin\helper\QueryHelper;
 use think\admin\service\NodeService;
-use think\site\Controller;
+use think\site\base\Controller;
 use think\site\model\SiteAuth;
 use think\site\model\SiteAuthNode;
-use think\site\SiteRegistry;
+use think\site\service\SiteRegistry;
 
 /**
  * 站点角色管理.

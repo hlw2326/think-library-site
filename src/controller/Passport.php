@@ -7,9 +7,9 @@ namespace think\site\controller;
 use think\admin\base\Controller;
 use think\site\model\Site;
 use think\site\model\SiteUser;
-use think\site\SiteAccess;
-use think\site\SiteContext;
-use think\site\SiteResolver;
+use think\site\service\SiteAccess;
+use think\site\service\SiteContext;
+use think\site\service\SiteResolver;
 
 /**
  * 站点登录入口.

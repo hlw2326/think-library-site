@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace think\site;
+namespace think\site\service;
 
 use think\admin\facade\Library;
 use think\admin\service\NodeService;

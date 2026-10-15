@@ -9,8 +9,8 @@ use think\admin\helper\QueryHelper;
 use think\site\model\Site;
 use think\site\model\SiteDomain;
 use think\site\model\SiteUser;
-use think\site\SiteContext;
-use think\site\SiteInit;
+use think\site\service\SiteContext;
+use think\site\service\SiteInit;
 
 /**
  * 站点管理(总控侧，走总控 RBAC).

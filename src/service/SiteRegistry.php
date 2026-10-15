@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace think\site;
+namespace think\site\service;
 
 use think\admin\facade\Plugin;
+use think\site\base\SitePlugin;
 
 /**
  * 分站插件注册表：按服务类是否继承 SitePlugin 识别分站插件.

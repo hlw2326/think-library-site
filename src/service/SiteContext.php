@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace think\site;
+namespace think\site\service;
 
 /**
  * 当前请求的站点上下文.

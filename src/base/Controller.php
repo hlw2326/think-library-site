@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace think\site;
+namespace think\site\base;
 
 use think\exception\HttpException;
+use think\site\service\SiteContext;
 
 /**
  * 站点控制器基类：分站插件的控制器继承它.

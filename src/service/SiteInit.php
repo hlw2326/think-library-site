@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace think\site;
+namespace think\site\service;
 
 use think\site\model\Site;
 use think\site\model\SiteAuth;

@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace think\site;
+namespace think\site\base;
 
 use think\admin\extend\CodeExtend;
 use think\db\Query;
+use think\site\service\SiteContext;
 
 /**
  * 站点隔离模型基类.

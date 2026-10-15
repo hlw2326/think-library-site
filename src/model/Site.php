@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace think\site\model;
 
 use think\model\relation\HasMany;
-use think\site\GlobalModel;
+use think\site\base\GlobalModel;
 
 /**
  * 站点.

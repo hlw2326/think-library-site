@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace think\site;
+namespace think\site\base;
 
 use think\admin\extend\CodeExtend;
 

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace think\site\controller\console;
 
 use think\admin\helper\QueryHelper;
-use think\site\Controller;
+use think\site\base\Controller;
 use think\site\model\SiteAuth;
 use think\site\model\SiteUser;
-use think\site\SiteInit;
+use think\site\service\SiteInit;
 
 /**
  * 站点用户管理.
