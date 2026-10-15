@@ -1,0 +1,46 @@
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form layui-card" data-table-id="UserTable" autocomplete="off">
+    <div class="layui-card-body padding-left-40">
+        <label class="layui-form-item relative block">
+            <span class="help-label"><b>{:lang('登录账号')}</b>User Name</span>
+            {if !empty($vo.id)}
+            <input name="username" value='{$vo.username|default=""}' readonly class="layui-input think-bg-gray">
+            <span class="help-block">{:lang('登录账号创建后不能再次修改.')}</span>
+            {else}
+            <input name="username" required pattern="^.{4,}$" vali-name="{:lang('登录账号')}" placeholder="{:lang('请输入登录账号')}" class="layui-input">
+            <span class="help-block">{:lang('登录账号不能少于4位字符，创建后不能再次修改.')}</span>
+            {/if}
+        </label>
+        <label class="layui-form-item relative block">
+            <span class="help-label"><b>{:lang('用户名称')}</b>Nick Name</span>
+            <input name="nickname" value='{$vo.nickname|default=""}' required vali-name="{:lang('用户名称')}" placeholder="{:lang('请输入用户名称')}" class="layui-input">
+        </label>
+        {if empty($vo.id)}
+        <label class="layui-form-item relative block">
+            <span class="help-label"><b>{:lang('登录密码')}</b>Password</span>
+            <input type="password" autocomplete="new-password" name="password" required minlength="8" vali-name="{:lang('登录密码')}" placeholder="{:lang('请输入不少于8位的登录密码')}" class="layui-input">
+        </label>
+        {/if}
+        <div class="layui-form-item">
+            <div class="help-label"><b>{:lang('角色')}</b>Roles</div>
+            <div class="layui-textarea help-checks">
+                {if !empty($vo.is_super)}
+                <span class="color-desc padding-left-5">{:lang('站点超级管理员拥有全部权限，不需要配置角色。')}</span>
+                {elseif !empty($auths)}
+                {foreach $auths as $auth}
+                <label class="think-checkbox">
+                    <input type="checkbox" name="authorize[]" value="{$auth.id}" lay-ignore {if in_array($auth.id, $vo.authorize ?? [])}checked{/if}>{$auth.title}
+                </label>
+                {/foreach}
+                {else}
+                <span class="color-desc padding-left-10">{:lang('（暂未创建角色，可先在【站点角色】中创建）')}</span>
+                {/if}
+            </div>
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+    {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>{:lang('保存数据')}</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="{:lang('确定要取消编辑吗？')}" data-close>{:lang('取消编辑')}</button>
+    </div>
+</form>

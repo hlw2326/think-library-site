@@ -1,0 +1,50 @@
+<fieldset>
+    <legend>{:lang('条件搜索')}</legend>
+    <form class="layui-form layui-form-pane form-search" action="{:sysuri()}" onsubmit="return false" method="get">
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">绑定域名</label>
+            <div class="layui-input-inline">
+                <input name="domain" value="{$get.domain|default=''}" placeholder="请输入绑定域名" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">所属分站</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="site_id" lay-search>
+                    <option value="">-- 全部站点 --</option>
+                    {foreach $sites as $id=>$s}
+                    {if isset($get.site_id) and $get.site_id eq $id}
+                    <option selected value="{$id}">[{$s.code}] {$s.name}</option>
+                    {else}
+                    <option value="{$id}">[{$s.code}] {$s.name}</option>
+                    {/if}
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">域名状态</label>
+            <div class="layui-input-inline">
+                <select class="layui-select" name="status">
+                    <option value="">-- 全部状态 --</option>
+                    {foreach ['1'=>'正常使用','0'=>'已被禁用'] as $k=>$v}
+                    {if isset($get.status) and $get.status eq $k}
+                    <option selected value="{$k}">{$v}</option>
+                    {else}
+                    <option value="{$k}">{$v}</option>
+                    {/if}
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">创建时间</label>
+            <div class="layui-input-inline">
+                <input data-date-range name="create_at" value="{$get.create_at|default=''}" placeholder="请选择创建时间" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> {:lang('搜 索')}</button>
+        </div>
+    </form>
+</fieldset>

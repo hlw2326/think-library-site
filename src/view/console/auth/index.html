@@ -1,0 +1,68 @@
+{extend name='table'}
+
+{block name="button"}
+<!--{if auth("add")}-->
+<button data-modal='{:sysuri("add")}' data-title="{:lang('添加角色')}" class='layui-btn layui-btn-sm layui-btn-primary'>{:lang('添加角色')}</button>
+<!--{/if}-->
+<!--{if auth("remove")}-->
+<a data-confirm="{:lang('确定删除这些角色吗？')}" data-table-id="AuthTable" data-action='{:sysuri("remove")}' data-rule="id#{id}" class='layui-btn layui-btn-sm layui-btn-primary'>{:lang('批量删除')}</a>
+<!--{/if}-->
+{/block}
+
+{block name="content"}
+<form class="layui-form layui-form-pane form-search" action="{:sysuri()}" onsubmit="return false" method="get" autocomplete="off">
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">{:lang('角色名称')}</label>
+        <label class="layui-input-inline">
+            <input name="title" value="{$get.title|default=''}" placeholder="{:lang('请输入角色名称')}" class="layui-input">
+        </label>
+    </div>
+    <div class="layui-form-item layui-inline">
+        <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> {:lang('搜 索')}</button>
+    </div>
+</form>
+<table id="AuthTable" data-url="{:sysuri('index')}" data-target-search="form.form-search"></table>
+<script>
+    $(function () {
+        $('#AuthTable').layTable({
+            even: true, height: 'full',
+            sort: {field: 'sort desc,create_at', type: 'desc'},
+            cols: [[
+                {checkbox: true, fixed: true},
+                {field: 'title', title: '{:lang("角色名称")}', minWidth: 140},
+                {field: 'desc', title: '{:lang("备注说明")}', minWidth: 160, templet: '<div>{{d.desc||"-"}}</div>'},
+                {field: 'status', title: '{:lang("使用状态")}', align: 'center', minWidth: 110, templet: '#StatusSwitchTpl'},
+                {field: 'create_at', title: '{:lang("创建时间")}', align: 'center', minWidth: 170},
+                {toolbar: '#toolbar', title: '{:lang("操作面板")}', align: 'center', minWidth: 220, fixed: 'right'}
+            ]]
+        });
+        layui.form.on('switch(StatusSwitch)', function (obj) {
+            var data = {id: obj.value, status: obj.elem.checked > 0 ? 1 : 0};
+            $.form.load("{:sysuri('state')}", data, 'post', function () {
+                $('#AuthTable').trigger('reload');
+                return false;
+            }, false);
+        });
+    });
+</script>
+
+<script type="text/html" id="StatusSwitchTpl">
+    <!--{if auth("state")}-->
+    <input type="checkbox" value="{{d.id}}" lay-skin="switch" lay-text="{:lang('已激活')}|{:lang('已禁用')}" lay-filter="StatusSwitch" {{-d.status>0?'checked':''}}>
+    <!--{else}-->
+    {{-d.status ? '<b class="color-green">{:lang("已激活")}</b>' : '<b class="color-red">{:lang("已禁用")}</b>'}}
+    <!--{/if}-->
+</script>
+
+<script type="text/html" id="toolbar">
+    <!--{if auth("edit")}-->
+    <a class="layui-btn layui-btn-sm" data-title="{:lang('编辑角色')}" data-modal='{:sysuri("edit")}?id={{d.id}}'>{:lang('编 辑')}</a>
+    <!--{/if}-->
+    <!--{if auth("nodes")}-->
+    <a class="layui-btn layui-btn-sm layui-btn-normal" data-title="{:lang('角色授权')}" data-modal='{:sysuri("nodes")}?id={{d.id}}' data-area="640px,560px">{:lang('授 权')}</a>
+    <!--{/if}-->
+    <!--{if auth("remove")}-->
+    <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="{:lang('确定要删除吗？')}" data-action="{:sysuri('remove')}" data-value="id#{{d.id}}">{:lang('删 除')}</a>
+    <!--{/if}-->
+</script>
+{/block}

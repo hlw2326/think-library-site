@@ -1,0 +1,44 @@
+<fieldset>
+    <legend>{:lang('条件搜索')}</legend>
+    <form class="layui-form layui-form-pane form-search" action="{:sysuri()}" onsubmit="return false" method="get">
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">分站名称</label>
+            <div class="layui-input-inline">
+                <input name="name" value="{$get.name|default=''}" placeholder="请输入分站名称" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">专属识别码</label>
+            <div class="layui-input-inline">
+                <input name="code" value="{$get.code|default=''}" placeholder="请输入专属识别代码" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">绑定域名</label>
+            <div class="layui-input-inline">
+                <input name="domain" value="{$get.domain|default=''}" placeholder="请输入绑定域名" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">联系人</label>
+            <div class="layui-input-inline">
+                <input name="contact" value="{$get.contact|default=''}" placeholder="请输入联系人姓名" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">联系手机</label>
+            <div class="layui-input-inline">
+                <input name="phone" value="{$get.phone|default=''}" placeholder="请输入联系手机号" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <label class="layui-form-label">创建时间</label>
+            <div class="layui-input-inline">
+                <input data-date-range name="create_at" value="{$get.create_at|default=''}" placeholder="请选择创建时间" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-inline">
+            <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> {:lang('搜 索')}</button>
+        </div>
+    </form>
+</fieldset>

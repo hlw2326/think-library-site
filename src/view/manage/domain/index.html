@@ -1,0 +1,109 @@
+{extend name='table'}
+
+{block name="button"}
+<!--{if auth("add")}-->
+<button data-modal='{:url("add")}' data-title="添加分站域名" class='layui-btn layui-btn-sm layui-btn-primary'>添加域名</button>
+<!--{/if}-->
+<!--{if auth("state")}-->
+<a data-confirm="确定要批量启用选中的域名吗？" data-table-id="DomainTable" data-action="{:url('state')}" data-rule="id#{id};status#1" class='layui-btn layui-btn-sm layui-btn-primary'>批量启用</a>
+<a data-confirm="确定要批量禁用选中的域名吗？" data-table-id="DomainTable" data-action="{:url('state')}" data-rule="id#{id};status#0" class='layui-btn layui-btn-sm layui-btn-primary'>批量禁用</a>
+<!--{/if}-->
+<!--{if auth("remove")}-->
+<a data-confirm="确定要批量删除选中的域名吗？" data-table-id="DomainTable" data-action='{:url("remove")}' data-rule="id#{id}" class='layui-btn layui-btn-sm layui-btn-danger'>批量删除</a>
+<!--{/if}-->
+{/block}
+
+{block name="content"}
+<div class="layui-row layui-col-space15 margin-bottom-15">
+    <div class="layui-col-xs12 layui-col-md4">
+        <div class="layui-card think-bg-blue">
+            <div class="layui-card-body padding-20 text-center">
+                <div class="font-s14">全部绑定域名</div>
+                <div class="font-s30 font-w700 margin-top-10">{$totalDomains|default=0}</div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-md4">
+        <div class="layui-card think-bg-violet">
+            <div class="layui-card-body padding-20 text-center">
+                <div class="font-s14">正常解析运行</div>
+                <div class="font-s30 font-w700 margin-top-10">{$activeDomains|default=0}</div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-md4">
+        <div class="layui-card think-bg-orig">
+            <div class="layui-card-body padding-20 text-center">
+                <div class="font-s14">已禁用域名</div>
+                <div class="font-s30 font-w700 margin-top-10">{$disabledDomains|default=0}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="layui-tab layui-tab-card">
+    <ul class="layui-tab-title">
+        {foreach ['index'=>'全部域名', 'active'=>'正常运行', 'disabled'=>'已禁用'] as $k=>$v}
+        {if isset($type) and $type eq $k}
+        <li data-open="{:url('index')}?type={$k}" class="layui-this">{$v}</li>
+        {else}
+        <li data-open="{:url('index')}?type={$k}">{$v}</li>
+        {/if}
+        {/foreach}
+    </ul>
+    <div class="layui-tab-content">
+        {include file='manage/domain/index_search'}
+        <table id="DomainTable" data-url="{:sysuri('index')}" data-target-search="form.form-search"></table>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#DomainTable').layTable({
+            even: true, height: 'full',
+            sort: {field: 'create_at', type: 'desc'},
+            where: {type: '{$type|default="index"}'},
+            cols: [[
+                {checkbox: true, fixed: true},
+                {
+                    field: 'domain', title: '绑定域名', width: 220, templet: function (d) {
+                        return '<a class="color-blue font-w600" target="_blank" href="//' + d.domain + '">' + d.domain + '</a>';
+                    }
+                },
+                {
+                    field: 'site_name', title: '所属分站', minWidth: 200, templet: function (d) {
+                        if (d.site && d.site.name) {
+                            return '<div><span class="layui-badge layui-bg-cyan margin-right-5">' + (d.site.code || '-') + '</span><span class="font-w600">' + d.site.name + '</span></div>';
+                        }
+                        return '<span class="color-desc">分站ID: ' + (d.site_id || 0) + '</span>';
+                    }
+                },
+                {
+                    field: 'status', title: '状态', width: 120, align: 'center', templet: function (d) {
+                        return d.status == 1 ? '<span class="layui-badge layui-bg-green">正常使用</span>' : '<span class="layui-badge layui-bg-gray">已被禁用</span>';
+                    }
+                },
+                {field: 'remark', title: '备注说明', minWidth: 150},
+                {field: 'create_at', title: '创建时间', width: 170, align: 'center'},
+                {toolbar: '#toolbar', title: '操作面板', width: 200, align: 'center', fixed: 'right'}
+            ]]
+        });
+    });
+</script>
+
+<script type="text/html" id="toolbar">
+    <!--{if auth("edit")}-->
+    <a class="layui-btn layui-btn-xs" data-title="编辑分站域名" data-modal='{:url("edit")}?id={{d.id}}'>编 辑</a>
+    <!--{/if}-->
+    <!--{if auth("state")}-->
+    {{# if(d.status == 0){ }}
+    <a class="layui-btn layui-btn-xs layui-btn-normal" data-action="{:url('state')}" data-value="id#{{d.id}};status#1">启 用</a>
+    {{# }else{ }}
+    <a class="layui-btn layui-btn-xs layui-btn-warm" data-action="{:url('state')}" data-value="id#{{d.id}};status#0">禁 用</a>
+    {{# } }}
+    <!--{/if}-->
+    <!--{if auth("remove")}-->
+    <a class="layui-btn layui-btn-xs layui-btn-danger" data-confirm="确定要删除此域名绑定吗？" data-action='{:url("remove")}' data-value="id#{{d.id}}">删 除</a>
+    <!--{/if}-->
+</script>
+{/block}

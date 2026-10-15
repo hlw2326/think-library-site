@@ -1,0 +1,40 @@
+<form action="{:sysuri()}?id={$vo.id}" method="post" data-auto="true" class="layui-form layui-card" autocomplete="off">
+    <div class="layui-card-body padding-left-40 padding-right-40">
+
+        <div class="layui-form-item margin-bottom-5">
+            <label class="relative block">
+                <span class="help-label"><b>{:lang('分站专属版权声明')}</b>Site Copyright</span>
+                <input name="config[copyright]" value="{$vo.config.copyright|default=''}" placeholder="{:lang('例如：© 2026 北京分站 版权所有')}" class="layui-input">
+                <span class="help-block">{:lang('分站专属版权声明文字，留空则默认继承平台版权 ~')}</span>
+            </label>
+        </div>
+
+        <div class="layui-form-item margin-bottom-5">
+            <label class="relative block">
+                <span class="help-label"><b>{:lang('分站 ICP 备案号')}</b>ICP License</span>
+                <input name="config[icp]" value="{$vo.config.icp|default=''}" placeholder="{:lang('例如：京ICP备12345678号')}" class="layui-input">
+                <span class="help-block">{:lang('请输入分站对应网站的工信部 ICP 备案号 ~')}</span>
+            </label>
+        </div>
+
+        <div class="layui-form-item margin-bottom-5">
+            <div class="help-label"><b>{:lang('分站客服二维码')}</b>Customer Service</div>
+            <div class="relative block">
+                <input class="layui-input" pattern="url" data-tips-image data-tips-hover placeholder="{:lang('请上传客服二维码图片')}" value="{$vo.config.service_qrcode|default=''}" name="config[service_qrcode]">
+                <a class="input-right-icon layui-icon layui-icon-upload-drag" data-file="btn" data-type="png,jpg,jpeg" data-field="config[service_qrcode]"></a>
+            </div>
+            <div class="help-block sub-span-blue">
+                {:lang('建议上传标准正方形二维码图片，显示于分站对外客服联系入口 ~')}
+            </div>
+        </div>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    <input type='hidden' value='{$vo.id}' name='id'>
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type="submit">{:lang('保存配置')}</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="{:lang('确定要取消编辑吗？')}" data-close>{:lang('取消编辑')}</button>
+    </div>
+</form>

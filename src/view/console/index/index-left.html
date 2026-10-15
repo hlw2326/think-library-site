@@ -1,0 +1,50 @@
+<div class="layui-side">
+    <a class="layui-side-target" data-target-menu-type></a>
+    <a class="layui-logo layui-elip" href="{:sysuri('site/console.index/index')}" title="{$site.name|default=''}">
+        <span class="headimg headimg-no headimg-xs" data-lazy-src="{$site.logo|default=''}"></span>
+        <span class="headtxt">{$site.name|default=''}</span>
+    </a>
+    <div class="layui-side-scroll">
+        <div class="layui-side-icon">
+            {foreach $menus as $one}
+            <div>
+                <a data-menu-node="m-{$one.id|default=''}" data-open="{$one.url}" data-target-tips="{$one.title|default=''}">
+                    {notempty name='one.icon'}<i class="{$one.icon|default=''}"></i>{/notempty}
+                    <span>{$one.title|default=''}</span>
+                </a>
+            </div>
+            {/foreach}
+        </div>
+        <div class="layui-side-tree">
+            {foreach $menus as $one}{notempty name='one.sub'}
+            <ul class="layui-nav layui-nav-tree layui-hide" data-menu-layout="m-{$one.id|default=''}">
+                {foreach $one.sub as $two}{empty name='two.sub'}
+                <li class="layui-nav-item">
+                    <a data-target-tips="{$two.title|default=''}" data-menu-node="m-{$one.id|default=''}-{$two.id|default=''}" data-open="{$two.url}">
+                        <span class='nav-icon {$two.icon|default="layui-icon layui-icon-senior"}'></span>
+                        <span class="nav-text">{$two.title|default=''}</span>
+                    </a>
+                </li>
+                {else}
+                <li class="layui-nav-item" data-submenu-layout='m-{$one.id|default=''}-{$two.id|default=''}'>
+                    <a data-target-tips="{$two.title|default=''}">
+                        <span class='nav-icon layui-hide {$two.icon|default="layui-icon layui-icon-triangle-d"}'></span>
+                        <span class="nav-text">{$two.title|default=''}</span>
+                    </a>
+                    <dl class="layui-nav-child">
+                        {foreach $two.sub as $thr}
+                        <dd>
+                            <a data-target-tips="{$thr.title|default=''}" data-open="{$thr.url}" data-menu-node="m-{$one.id|default=''}-{$two.id|default=''}-{$thr.id|default=''}">
+                                <span class='nav-icon {$thr.icon|default="layui-icon layui-icon-senior"}'></span>
+                                <span class="nav-text">{$thr.title|default=''}</span>
+                            </a>
+                        </dd>
+                        {/foreach}
+                    </dl>
+                </li>
+                {/empty}{/foreach}
+            </ul>
+            {/notempty}{/foreach}
+        </div>
+    </div>
+</div>

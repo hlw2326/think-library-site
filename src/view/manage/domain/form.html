@@ -1,0 +1,59 @@
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form layui-card" autocomplete="off">
+    <div class="layui-card-body padding-left-40 padding-right-40">
+
+        <!-- 目标分站选择 -->
+        <div class="layui-form-item margin-bottom-5">
+            <div class="help-label label-required-prev"><b>{:lang('所属分站')}</b>Target Site</div>
+            <div class="relative block label-required-null">
+                <select class="layui-select" name="site_id" lay-search required>
+                    <option value="">-- {:lang('请选择所属分站')} --</option>
+                    {foreach $sites as $id=>$s}
+                    {if (isset($vo.site_id) and $vo.site_id eq $id)}
+                    <option selected value="{$id}">[{$s.code}] {$s.name}</option>
+                    {else}
+                    <option value="{$id}">[{$s.code}] {$s.name}</option>
+                    {/if}
+                    {/foreach}
+                </select>
+            </div>
+            <span class="help-block">{:lang('请选择该域名所归属绑定的目标分站系统 ~')}</span>
+        </div>
+
+        <!-- 绑定域名 -->
+        <div class="layui-form-item margin-bottom-5">
+            <label class="relative block">
+                <span class="help-label label-required-prev"><b>{:lang('绑定域名')}</b>Domain Name</span>
+                <input name="domain" value="{$vo.domain|default=''}" required placeholder="{:lang('例如：vip01.example.com 或 admin.site.com')}" class="layui-input">
+                <span class="help-block">{:lang('请输入分站对外独立访问域名（纯域名格式，无需带 http:// 或端口号）~')}</span>
+            </label>
+        </div>
+
+        <!-- 域名状态 -->
+        <div class="layui-form-item margin-bottom-5">
+            <div class="help-label"><b>{:lang('解析状态')}</b>Domain Status</div>
+            <div class="layui-input block">
+                {foreach ['1'=>'正常使用','0'=>'禁用状态'] as $k=>$v}
+                <input type="radio" name="status" value="{$k}" title="{$v}" {if (!isset($vo.status) and $k eq '1') or (isset($vo.status) and $vo.status eq $k)}checked{/if}>
+                {/foreach}
+            </div>
+            <span class="help-block">{:lang('停用后该域名将无法继续穿梭解析进入分站后台 ~')}</span>
+        </div>
+
+        <!-- 备注说明 -->
+        <div class="layui-form-item margin-bottom-5">
+            <span class="help-label"><b>{:lang('备注说明')}</b>Remark</span>
+            <label class="relative block">
+                <textarea name="remark" placeholder="{:lang('请输入域名用途或备注说明')}" class="layui-textarea" style="min-height:60px">{$vo.remark|default=''}</textarea>
+            </label>
+        </div>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type="submit">{:lang('保存域名')}</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="{:lang('确定要取消编辑吗？')}" data-close>{:lang('取消编辑')}</button>
+    </div>
+</form>

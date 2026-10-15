@@ -1,0 +1,26 @@
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form layui-card" data-table-id="AuthTable" autocomplete="off">
+    <div class="layui-card-body padding-left-40">
+        <div class="layui-form-item">
+            <span class="help-label"><b>{:lang('角色')}</b>{$vo.title|default=''}</span>
+        </div>
+        {foreach $groups as $app => $nodes}
+        <fieldset class="layui-bg-gray margin-bottom-10">
+            <legend><b class="layui-badge think-bg-violet">{$app}</b></legend>
+            <div class="layui-textarea help-checks">
+                {foreach $nodes as $node => $title}
+                <label class="think-checkbox">
+                    <input type="checkbox" name="nodes[]" value="{$node}" lay-ignore {if in_array($node, $checked)}checked{/if}>{$title}
+                </label>
+                {/foreach}
+            </div>
+        </fieldset>
+        {/foreach}
+        {empty name='groups'}<span class="color-desc">{:lang('暂无可授权的功能节点')}</span>{/empty}
+    </div>
+    <div class="hr-line-dashed"></div>
+    <input type='hidden' value='{$vo.id}' name='id'>
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>{:lang('保存授权')}</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-close>{:lang('取消')}</button>
+    </div>
+</form>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{$title|default='站点登录'}</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #f2f3f5; font: 14px/1.6 -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; color: #333; }
+        form { width: 360px; max-width: 92vw; padding: 32px 28px; background: #fff; border-radius: 8px; box-shadow: 0 4px 24px rgba(0, 0, 0, .08); }
+        h2 { margin: 0 0 24px; text-align: center; font-size: 20px; }
+        label { display: block; margin-bottom: 14px; }
+        label span { display: block; margin-bottom: 4px; color: #666; }
+        input { width: 100%; height: 38px; padding: 0 12px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; }
+        input:focus { outline: none; border-color: #1e9fff; }
+        button { width: 100%; height: 40px; margin-top: 6px; border: 0; border-radius: 4px; background: #1e9fff; color: #fff; font-size: 15px; cursor: pointer; }
+        button[disabled] { opacity: .6; cursor: not-allowed; }
+        .msg { min-height: 22px; margin-top: 12px; color: #ff5722; text-align: center; }
+        .site { margin: -12px 0 18px; text-align: center; color: #999; }
+    </style>
+</head>
+<body>
+<form id="login" method="post" action="{:sysuri('site/passport/index')}" autocomplete="off">
+    <h2>{$title|default='站点登录'}</h2>
+    {notempty name='hostSite'}
+    <div class="site">{$hostSite.name|default=''}</div>
+    {else}
+    <label><span>站点编码</span><input name="code" required placeholder="请输入站点编码" autocomplete="off"></label>
+    {/notempty}
+    <label><span>登录账号</span><input name="username" required autofocus placeholder="请输入登录账号" autocomplete="username"></label>
+    <label><span>登录密码</span><input name="password" type="password" required placeholder="请输入登录密码" autocomplete="current-password"></label>
+    <button type="submit">登 录</button>
+    <div class="msg" id="msg"></div>
+</form>
+<script>
+    (function () {
+        var form = document.getElementById('login'), msg = document.getElementById('msg'), btn = form.querySelector('button');
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            msg.textContent = '';
+            btn.disabled = true;
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', form.action);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.onload = function () {
+                btn.disabled = false;
+                var ret;
+                try { ret = JSON.parse(xhr.responseText); } catch (err) { ret = {code: 0, info: '服务器返回异常'}; }
+                if (ret.code === 1) {
+                    location.href = ret.data || '{:sysuri("site/console.index/index")}';
+                } else {
+                    msg.textContent = ret.info || '登录失败';
+                }
+            };
+            xhr.onerror = function () { btn.disabled = false; msg.textContent = '网络异常，请稍后再试'; };
+            xhr.send(new URLSearchParams(new FormData(form)));
+        });
+    })();
+</script>
+</body>
+</html>

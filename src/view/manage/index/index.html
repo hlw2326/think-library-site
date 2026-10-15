@@ -1,0 +1,145 @@
+{extend name='table'}
+
+{block name="button"}
+<!--{if auth("add")}-->
+<button data-modal='{:url("add")}' data-title="创建新分站" class='layui-btn layui-btn-sm layui-btn-primary'>创建分站</button>
+<!--{/if}-->
+<!--{if auth("state")}-->
+<a data-confirm="确定要批量启用选中的分站吗？" data-table-id="SiteTable" data-action="{:url('state')}" data-rule="id#{id};status#1" class='layui-btn layui-btn-sm layui-btn-primary'>批量启用</a>
+<a data-confirm="确定要批量停用选中的分站吗？" data-table-id="SiteTable" data-action="{:url('state')}" data-rule="id#{id};status#0" class='layui-btn layui-btn-sm layui-btn-primary'>批量停用</a>
+<!--{/if}-->
+{/block}
+
+{block name="content"}
+<div class="layui-row layui-col-space15 margin-bottom-15">
+    <div class="layui-col-xs12 layui-col-md3">
+        <div class="layui-card think-bg-blue">
+            <div class="layui-card-body padding-20 text-center">
+                <div class="font-s14">全部站点总数</div>
+                <div class="font-s30 font-w700 margin-top-10">{$totalSites|default=0}</div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-md3">
+        <div class="layui-card think-bg-violet">
+            <div class="layui-card-body padding-20 text-center">
+                <div class="font-s14">正常运行中</div>
+                <div class="font-s30 font-w700 margin-top-10">{$activeSites|default=0}</div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-md3">
+        <div class="layui-card think-bg-red">
+            <div class="layui-card-body padding-20 text-center">
+                <div class="font-s14">即将到期站点 (30天内)</div>
+                <div class="font-s30 font-w700 margin-top-10">{$expireSites|default=0}</div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-md3">
+        <div class="layui-card think-bg-orig">
+            <div class="layui-card-body padding-20 text-center">
+                <div class="font-s14">已停用站点</div>
+                <div class="font-s30 font-w700 margin-top-10">{$disabledSites|default=0}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="layui-tab layui-tab-card">
+    <ul class="layui-tab-title">
+        {foreach ['index'=>'全部站点', 'active'=>'正常运行', 'expire'=>'即将到期', 'disabled'=>'已停用'] as $k=>$v}
+        {if isset($type) and $type eq $k}
+        <li data-open="{:url('index')}?type={$k}" class="layui-this">{$v}</li>
+        {else}
+        <li data-open="{:url('index')}?type={$k}">{$v}</li>
+        {/if}
+        {/foreach}
+    </ul>
+    <div class="layui-tab-content">
+        {include file='manage/index/index_search'}
+        <table id="SiteTable" data-url="{:sysuri('index')}" data-target-search="form.form-search"></table>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#SiteTable').layTable({
+            even: true, height: 'full',
+            sort: {field: 'sort desc,create_at', type: 'desc'},
+            where: {type: '{$type|default="index"}'},
+            cols: [[
+                {checkbox: true, fixed: true},
+                {field: 'sort', title: '排序', width: 80, align: 'center', sort: true, templet: '#SortInputTpl'},
+                {field: 'logo', title: 'Logo', width: 70, align: 'center', templet: '<div>{{-$.layTable.showImage(d.logo)}}</div>'},
+                {
+                    field: 'name', title: '站点名称 / 专属识别码', width: 200,  templet: function (d) {
+                        var html = '<div class="font-w600">' + (d.name || '-') + '</div>';
+                        html += '<div class="color-desc font-s12 margin-top-5"><span class="layui-badge layui-bg-blue" style="cursor:pointer;" title="点击复制专属代码" data-copy="' + d.code + '">' + (d.code || '-') + '</span> <a target="_blank" href="/admin.html?code=' + d.code + '" class="color-blue font-s11 margin-left-5">/admin?code=' + d.code + '</a></div>';
+                        return html;
+                    }
+                },
+                {field: 'domains', title: '绑定域名', width: 220, templet: '#DomainsTpl'},
+                {
+                    field: 'contact', title: '联系人 / 电话', width: 200, templet: function (d) {
+                        var c = d.contact || '-';
+                        var p = d.phone ? ('<div class="color-desc font-s12">' + d.phone + '</div>') : '';
+                        return '<div>' + c + '</div>' + p;
+                    }
+                },
+                {
+                    field: 'expire_at', title: '服务到期时间', width: 160, sort: true, templet: function (d) {
+                        if (!d.expire_at) return '<span class="color-desc">永久有效</span>';
+                        var exp = new Date(d.expire_at.replace(/-/g, '/')).getTime();
+                        var now = new Date().getTime();
+                        var isExpire = exp < now;
+                        var isNear = exp < (now + 30 * 86400000);
+                        if (isExpire) {
+                            return '<span class="layui-badge layui-bg-red">已到期: ' + d.expire_at + '</span>';
+                        } else if (isNear) {
+                            return '<span class="layui-badge layui-bg-orange">临近到期: ' + d.expire_at + '</span>';
+                        }
+                        return '<span class="color-green font-s12">' + d.expire_at + '</span>';
+                    }
+                },
+                {field: 'status', title: '状态', width: 120, align: 'center', templet: '#StatusSwitchTpl'},
+                {field: 'create_at', title: '创建时间', width: 150, align: 'center'},
+                {toolbar: '#toolbar', title: '操作面板' }
+            ]]
+        });
+    });
+</script>
+
+<!-- 绑定域名模板 -->
+<script type="text/html" id="DomainsTpl">
+    {{# if(!d.domains){ }}
+    <span class="color-desc">未绑定独立域名</span>
+    {{# } else { }}
+    {{# layui.each(d.domains.split(','), function(index, item){ var domain = item.trim(); if(domain){ }}
+    <div><a target="_blank" href="{{d.scheme}}://{{domain}}" class="color-blue font-w600">{{domain}}</a></div>
+    {{# } }); }}
+    {{# } }}
+</script>
+
+<!-- 状态切换模板 -->
+<script type="text/html" id="StatusSwitchTpl">
+    <!--{if auth("state")}-->
+    <input type="checkbox" value="{{d.id}}" lay-skin="switch" lay-text="开启|停用" lay-filter="StatusSwitch" {{d.status==1?'checked':''}}>
+    <!--{else}-->
+    {{d.status==1?'<span class="color-green">正常</span>':'<span class="color-desc">禁用</span>'}}
+    <!--{/if}-->
+</script>
+
+<!-- 操作列工具条 -->
+<script type="text/html" id="toolbar">
+    <!--{if auth("config")}-->
+    <a class="layui-btn layui-btn-sm" data-modal="{:url('config')}?id={{d.id}}" data-title="站点【{{d.name}}】配置">配置</a>
+    <!--{/if}-->
+    <!--{if auth("edit")}-->
+    <a class="layui-btn layui-btn-sm" data-modal="{:url('edit')}?id={{d.id}}" data-title="编辑分站信息">编辑</a>
+    <!--{/if}-->
+    <!--{if auth("pass")}-->
+    <a class="layui-btn layui-btn-sm layui-btn-normal" data-modal="{:url('pass')}?id={{d.id}}" data-title="修改【{{d.name}}】超级管理员密码">改密</a>
+    <!--{/if}-->
+</script>
+{/block}

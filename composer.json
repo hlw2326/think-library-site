@@ -1,0 +1,53 @@
+{
+  "type": "think-admin-plugin",
+  "name": "hlw2326/think-library-site",
+  "license": "MIT",
+  "homepage": "https://thinkadmin.top",
+  "description": "Multi-site support for HlwAdmin",
+  "authors": [
+    {
+      "name": "hlw2326",
+      "email": "1608626143@qq.com"
+    }
+  ],
+  "require": {
+    "php": "^8.2",
+    "hlw2326/think-library": "^6.1|@dev",
+    "hlw2326/think-plugs-admin": "^1.0|@dev",
+    "topthink/think-migration": "^3.0|*"
+  },
+  "autoload": {
+    "files": [
+      "src/helper.php"
+    ],
+    "psr-4": {
+      "think\\site\\": "src"
+    }
+  },
+  "extra": {
+    "think": {
+      "services": [
+        "think\\site\\Service"
+      ]
+    },
+    "plugin": {
+      "copy": {
+        "stc/database": "database/migrations"
+      }
+    },
+    "config": {
+      "type": "module",
+      "name": "多站点管理",
+      "document": "https://thinkadmin.top/plugin/think-library-site.html",
+      "description": "提供站点、域名、站点用户与角色管理，以及分站请求隔离和站点插件支持。"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "hlw2326/think-install": true
+    }
+  }
+}

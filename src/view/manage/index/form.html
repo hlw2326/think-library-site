@@ -1,0 +1,107 @@
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form layui-card" autocomplete="off">
+    <div class="layui-card-body padding-left-40 padding-right-40">
+
+        <!-- 基础配置 -->
+        <div class="layui-row layui-col-space15 margin-bottom-5">
+            <div class="layui-col-xs6 padding-bottom-0">
+                <label class="relative block">
+                    <span class="help-label label-required-prev"><b>{:lang('分站名称')}</b>Site Name</span>
+                    <input name="name" value="{$vo.name|default=''}" required vali-name="{:lang('分站名称')}" placeholder="{:lang('请输入分站名称，例如：北京分站、官方商城')}" class="layui-input">
+                    <span class="help-block">{:lang('用于系统后台标题及各处站点标识展示 ~')}</span>
+                </label>
+            </div>
+            <div class="layui-col-xs6 padding-bottom-0">
+                <label class="relative block">
+                    <span class="help-label label-required-prev"><b>{:lang('分站专属代码')}</b>Site Code</span>
+                    <input name="code" value="{$vo.code|default=''}" required pattern="^[a-zA-Z0-9_-]{2,30}$" vali-name="{:lang('专属代码')}" placeholder="{:lang('请输入2-30位字母数字代码，如 beijing, vip01')}" class="layui-input">
+                    <span class="help-block">{:lang('专属识别代码，用户可通过 URL 参数（?code=xxx）或在登录页指定 ~')}</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- 站点Logo -->
+        <div class="layui-row layui-col-space15 margin-bottom-5">
+            <div class="layui-col-xs12 padding-bottom-0">
+                <div class="help-label"><b>{:lang('分站图标 Logo')}</b>Site Logo</div>
+                <div class="relative block">
+                    <input class="layui-input" pattern="url" vali-name="{:lang('Logo文件')}" data-tips-image data-tips-hover placeholder="{:lang('请上传分站Logo图片')}" value="{$vo.logo|default=''}" name="logo">
+                    <a class="input-right-icon layui-icon layui-icon-upload-drag" data-file="btn" data-type="png,jpg,jpeg,svg" data-field="logo"></a>
+                </div>
+                <div class="help-block sub-span-blue">
+                    {:lang('建议上传透明底 PNG 或高分辨率 JPG 图片，显示于分站管理后台左上角 ~')}
+                </div>
+            </div>
+        </div>
+
+        <!-- 联络信息 -->
+        <div class="layui-row layui-col-space15 margin-bottom-5">
+            <div class="layui-col-xs4 padding-bottom-0">
+                <label class="relative block">
+                    <span class="help-label"><b>{:lang('联系人姓名')}</b>Contact Person</span>
+                    <input name="contact" value="{$vo.contact|default=''}" placeholder="{:lang('请输入分站负责人')}" class="layui-input">
+                </label>
+            </div>
+            <div class="layui-col-xs4 padding-bottom-0">
+                <label class="relative block">
+                    <span class="help-label"><b>{:lang('联系手机电话')}</b>Contact Phone</span>
+                    <input name="phone" value="{$vo.phone|default=''}" placeholder="{:lang('请输入联系电话')}" class="layui-input">
+                </label>
+            </div>
+            <div class="layui-col-xs4 padding-bottom-0">
+                <label class="relative block">
+                    <span class="help-label"><b>{:lang('电子邮箱')}</b>Email Address</span>
+                    <input name="email" value="{$vo.email|default=''}" placeholder="{:lang('请输入联系邮箱')}" class="layui-input">
+                </label>
+            </div>
+            <div class="layui-col-xs8 padding-top-0 padding-bottom-0">
+                <label class="relative block">
+                    <span class="help-label"><b>{:lang('详细联络地址')}</b>Site Address</span>
+                    <input name="address" value="{$vo.address|default=''}" placeholder="{:lang('请输入所在地址')}" class="layui-input">
+                </label>
+            </div>
+            <div class="layui-col-xs4 padding-top-0 padding-bottom-0">
+                <label class="relative block">
+                    <span class="help-label"><b>{:lang('服务有效期截止')}</b>Expire Time</span>
+                    <input data-date-input="datetime" name="expire_at" value="{$vo.expire_at|default=''}" placeholder="{:lang('留空默认1年后到期')}" class="layui-input">
+                </label>
+            </div>
+        </div>
+
+        <!-- 初始管理员配置（仅首次新建展示） -->
+        {if empty($vo.id)}
+        <div class="layui-row layui-col-space15 margin-bottom-5">
+            <div class="layui-col-xs6 padding-bottom-0">
+                <label class="relative block">
+                    <span class="help-label label-required-prev"><b>{:lang('分站初始管理员')}</b>Admin User</span>
+                    <input name="admin_user" value="admin" required vali-name="{:lang('管理员账号')}" placeholder="{:lang('请输入初始管理员账号')}" class="layui-input">
+                    <span class="help-block">{:lang('创建分站时自动初始化的后台管理员账号，默认为 admin ~')}</span>
+                </label>
+            </div>
+            <div class="layui-col-xs6 padding-bottom-0">
+                <label class="relative block">
+                    <span class="help-label label-required-prev"><b>{:lang('管理员初始密码')}</b>Admin Password</span>
+                    <input type="password" autocomplete="new-password" name="admin_pass" value="" required minlength="8" vali-name="{:lang('初始密码')}" placeholder="{:lang('请输入不少于8位的初始登录密码')}" class="layui-input">
+                    <span class="help-block">{:lang('初始登录密码，至少8位，首次登录后请尽快修改 ~')}</span>
+                </label>
+            </div>
+        </div>
+        {/if}
+
+        <!-- 备注说明 -->
+        <div class="layui-form-item margin-bottom-5">
+            <span class="help-label"><b>{:lang('分站备注说明')}</b>Site Remark</span>
+            <label class="relative block">
+                <textarea name="remark" placeholder="{:lang('请输入分站备注说明或特别事项')}" class="layui-textarea" style="min-height:60px">{$vo.remark|default=''}</textarea>
+            </label>
+        </div>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type="submit">{:lang('保存分站')}</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="{:lang('确定要取消编辑吗？')}" data-close>{:lang('取消编辑')}</button>
+    </div>
+</form>

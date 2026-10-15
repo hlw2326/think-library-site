@@ -1,0 +1,17 @@
+{extend name='main'}
+
+{block name="content"}
+<div class="think-box-shadow">
+    <div class="layui-card-body">
+        <h3 class="margin-bottom-15">{$site.name|default=''}</h3>
+        <table class="layui-table">
+            <tbody>
+            <tr><td width="140">站点编码</td><td>{$site.code|default='-'}</td></tr>
+            <tr><td>联系人</td><td>{$site.contact|default='-'}</td></tr>
+            <tr><td>联系电话</td><td>{$site.phone|default='-'}</td></tr>
+            <tr><td>服务到期</td><td>{$site.expire_at|default='-'}</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{/block}
